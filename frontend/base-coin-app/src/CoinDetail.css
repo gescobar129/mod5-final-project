@@ -1,0 +1,18 @@
+#coin-detail-container {
+  border: red 
+}
+
+.header-div {
+  font-size: 50px;
+  padding: 50px
+  /* display: flex; */
+  /* align-items: center */
+}
+#follow-button {
+  float: right;
+  font-size: 30px
+}
+
+#row-edits {
+  padding-left: 70px
+}
