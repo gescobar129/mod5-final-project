@@ -33,13 +33,22 @@ export default class Login extends Component {
       })
     })
     .then(response => response.json())
-    .then(data => {
+    .then(async data => {
       if (data.errors) {
         this.setState({
           errors: data.errors
         })
       } else {
-        this.props.setToken(data)
+        this.props.setToken(data);
+        // const response = await fetch(`http://localhost:3000/favorites`);
+        // const favoritesData = await response.json()
+        // const arr = favoritesData.filter(coin => {
+        //   return coin.user.id === parseInt(this.props.loggedInUserId)
+        // })
+
+        const response = await fetch(`http://localhost:3000/users/${this.props.loggedInUserId}`);
+        const userData = await response.json()
+        this.props.setWatchlistCoins(userData.favorite_coins)
       }
     })
   }

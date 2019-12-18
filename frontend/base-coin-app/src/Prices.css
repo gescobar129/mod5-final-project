@@ -10,7 +10,15 @@
 }
 
 #price-table {
-  padding-bottom: 40px
+  padding-bottom: 40px;
+    /* font-family: 'Lato', sans-serif; */
+font-family: 'Hind', sans-serif;
+}
+
+#table-items {
+font-size: 18px;
+font-family: 'Solway', serif;
+
 }
 
 .coin-logo {

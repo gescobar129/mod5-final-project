@@ -9,30 +9,52 @@ import NavbarComponent from './NavbarComponent';
 import LandingPage from './LandingPage';
 import Login from './Login';
 import Signup from './Signup';
-import Dashboard from './Dashboard'
-import Prices from './Prices'
+import Dashboard from './Dashboard';
+import Prices from './Prices';
 import CoinDetail from './CoinDetail';
+import Watchlist from './Watchlist';
 
 export default class App extends Component {
 
   state = {
-    token: null,
-    loggedInUserId: null
+    token: localStorage.token,
+    loggedInUserId: localStorage.userId,
+    watchlistCoins: localStorage.watchlistCoins ? JSON.parse(localStorage.watchlistCoins) : []
   }
 
-  componentDidMount(){
-    // this.setToken({
-    //   token: localStorage.token,
-    //   user_id: localStorage.userId
-    // })
-      this.setState({
-        token: localStorage.token,
-        loggedInUserId: localStorage.userId
-      })
-    }
+
+  // async componentDidMount() {
+    
+
+  //   // const response = await fetch(`http://localhost:3000/users/${this.state.loggedInUserId}`)
+  //   const data = await response.json()
+  //   // console.log(data)
+  //     const arr = data.filter(coin => {
+  //     return coin.user.id === parseInt(this.state.loggedInUserId)
+  //     // watchlistCoins: data.favorite_coins,
+  //     // token: localStorage.token,
+  //     // loggedInUserId: localStorage.userId
+  //   })
+  //   this.setWatchlistCoins(arr)
+  //   }
+  
+
+  setWatchlistCoins = (arr) => {
+    localStorage.watchlistCoins = JSON.stringify(arr)
+
+    this.setState({
+      watchlistCoins: arr
+    })
+  }
+  
+  // componentDidMount(){
+  //     this.setState({
+  //       token: localStorage.token,
+  //       loggedInUserId: localStorage.userId
+  //     })
+  //   }
 
   setToken = ({ token, user_id })  =>{
-
     localStorage.token = token
     localStorage.userId = user_id
 
@@ -44,15 +66,41 @@ export default class App extends Component {
 
   logOutClick = () => {
     localStorage.clear()
-    // localStorage.userId = undefined
-    // localStorage.token = undefined
+
     this.setState({
       loggedInUserId: null,
-      token: null
+      token: null,
+      watchlistCoins: []
     })
   }
 
+  addToWatchlist = (selectedCoin) => {
+    if (!!this.state.token && !this.state.watchlistCoins.find(element => element.id === selectedCoin.id)) {
+        fetch('http://localhost:3000/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          user_id: this.state.loggedInUserId,
+          coin_id: selectedCoin.id
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+        this.setState({
+          watchlistCoins: [...this.state.watchlistCoins, data]
+        })
+      })
+  } else {
+    alert("you are already following this coin")
+  }
+}
+
   render() {
+    // console.log(this.state.watchlistCoins)
     return (
       <div>
         <Router>
@@ -65,7 +113,7 @@ export default class App extends Component {
             <Signup setToken={this.setToken} token={this.state.token}/>
           </Route>
           <Route path="/login">
-            <Login setToken={this.setToken} token={this.state.token}/>
+            <Login loggedInUserId={this.state.loggedInUserId} setToken={this.setToken} token={this.state.token} setWatchlistCoins={this.setWatchlistCoins} />
           </Route>
           <Route path="/dashboard">
             <Dashboard token={this.state.token}/>
@@ -73,7 +121,12 @@ export default class App extends Component {
           <Route path="/prices" component={Prices}>
             {/* <Prices token={this.state.token}/> */}
           </Route>
-          <Route path="/coin-detail" component={CoinDetail}>
+          
+          <Route path="/coin-detail" component={(navProps) => <CoinDetail {...navProps} token={this.state.token} loggedInUserId={this.state.loggedInUserId} addToWatchlist={this.addToWatchlist} watchlistCoins={this.state.watchlistCoins}/>}>
+          </Route>
+
+          <Route path="/watchlist" >
+            <Watchlist loggedInUserId={this.state.loggedInUserId} token={this.state.token} watchlistCoins={this.state.watchlistCoins}/>
           </Route>
           <Route path="/">
             <LandingPage />

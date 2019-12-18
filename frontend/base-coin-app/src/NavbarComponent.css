@@ -1,10 +1,15 @@
 #navbar-css {
-  padding-bottom: 30px
+  padding-bottom: 30px;
+  background-color: white;
+  /* position: fixed;  */
+  /* top: 10; */
+  /* width: 100%; */
 }
 
 #basecoin {
   font-family: 'Lato', sans-serif;
-
+  font-size: 40px;
+  color: #1652f0
 }
 
 /* Add a black background color to the top navigation */
@@ -53,5 +58,5 @@
 }
 
 #basecoin {
-  font-size: 30px;
+  
 }

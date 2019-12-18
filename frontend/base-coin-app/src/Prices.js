@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Table } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
 import Search from './Search';
-// import CoinDetail from './CoinDetail';
 import "./Prices.css"
 
 export default class Prices extends Component {
@@ -30,9 +29,7 @@ export default class Prices extends Component {
   }
 
   handleClick = (coin) => {
-  
-      this.props.history.push('/coin-detail', {...coin})
-   
+      this.props.history.push('/coin-detail', {selectedCoin: coin, coinList: this.state.coins})
   }
 
 
@@ -59,10 +56,10 @@ export default class Prices extends Component {
             return <tbody onClick = {() => this.handleClick(coin)}>
               <tr>
                 <th scope="row" id="price-table">{coin.rank} </th>
-                  <td><img alt="not found" className="coin-logo"src={coin.img_url}></img>{coin.name}<span style={{ marginLeft: 15}}>{coin.symbol}</span></td>
-                  <td>${coin.price > .99 ? coin.price.toFixed(2) : coin.price.toFixed(4)}</td>
-                  <td style={{color: coin.percent_change_24h < 0 ? 'red' : 'green'}}>{coin.percent_change_24h.toFixed(2)}%</td>
-                  <td>${coin.market_cap}</td>
+                  <td id="table-items"><img alt="not found" className="coin-logo"src={coin.img_url}></img>{coin.name}<span style={{ marginLeft: 15}}>{coin.symbol}</span></td>
+                  <td id="table-items">${coin.price > .99 ? coin.price.toFixed(2) : coin.price.toFixed(4)}</td>
+                  <td id="table-items" style={{color: coin.percent_change_24h < 0 ? 'red' : 'green'}}>{coin.percent_change_24h.toFixed(2)}%</td>
+                  <td id="table-items">${coin.market_cap}</td>
               </tr> 
             </tbody>
           })}

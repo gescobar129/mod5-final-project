@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Link,
-  NavLink
+  Link
 } from "react-router-dom";
 import { Button } from 'reactstrap';
 import './NavbarComponent.css'
@@ -20,10 +19,10 @@ export default class NavbarComponent extends Component {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-            <NavLink to="/prices" class="nav-link">Prices<span class="sr-only">(current)</span></NavLink>
+            <Link to="/prices" class="nav-link">Prices<span class="sr-only">(current)</span></Link>
               {/* <a class="nav-link" href="#">Prices <span class="sr-only">(current)</span></a> */}
             </li>
-            {!!this.props.token ? <Link to="/dashboard" class="nav-item">Dashboard</Link> : ""}
+            {!!this.props.token ? <Link to="/dashboard" class="nav-link">Dashboard</Link> : ""}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Company
@@ -35,8 +34,8 @@ export default class NavbarComponent extends Component {
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            <li class="nav-item active">
+            {!!this.props.token ? <Link to="/watchlist" class="nav-link">Watchlist</Link> : ""}
             </li>
           </ul>
           {!!this.props.token ? <Button color="danger" onClick={this.props.logOutClick}>Log out</Button> : ""}
