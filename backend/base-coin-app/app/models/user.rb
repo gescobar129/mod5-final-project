@@ -9,5 +9,8 @@ class User < ApplicationRecord
   
   has_secure_password
 
-  
+  # def all_favorites 
+  #   self.favorites
+  # end
+
 end

@@ -19,7 +19,8 @@ export default class App extends Component {
   state = {
     token: localStorage.token,
     loggedInUserId: localStorage.userId,
-    watchlistCoins: localStorage.watchlistCoins ? JSON.parse(localStorage.watchlistCoins) : []
+    watchlistCoins: localStorage.watchlistCoins ? JSON.parse(localStorage.watchlistCoins) : [],
+    // favoriteItems: localStorage.favoriteItems
   }
 
 
@@ -75,7 +76,9 @@ export default class App extends Component {
   }
 
   addToWatchlist = (selectedCoin) => {
-    if (!!this.state.token && !this.state.watchlistCoins.find(element => element.id === selectedCoin.id)) {
+    console.log('state', this.state)
+    console.log('selectedcoin', selectedCoin)
+    if (!!this.state.token && !this.state.watchlistCoins.find(element => element.coin.id === selectedCoin.id)) {
         fetch('http://localhost:3000/favorites', {
         method: 'POST',
         headers: {
@@ -89,9 +92,10 @@ export default class App extends Component {
       })
       .then(response => response.json())
       .then(data => {
-        // console.log(data)
+        console.log(data)
         this.setState({
-          watchlistCoins: [...this.state.watchlistCoins, data]
+          watchlistCoins: [...this.state.watchlistCoins, data],
+          // favoriteItems: data
         })
       })
   } else {
@@ -99,38 +103,73 @@ export default class App extends Component {
   }
 }
 
+removeFromWatchlist = (id) => {
+  fetch(`http://localhost:3000/favorites/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+  this.setState({
+    watchlistCoins: this.state.watchlistCoins.filter(element => element.id !== id)
+  })
+  // .then(response => response.json())
+  // .then(data => {
+  //   debugger
+  // })
+}
+
   render() {
-    // console.log(this.state.watchlistCoins)
+
+    console.log(this.state.watchlistCoins)
+    console.log(this.state.favoriteItems)
     return (
       <div>
         <Router>
       <div>
-        <NavbarComponent logOutClick={this.logOutClick} token={this.state.token}/>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+        <NavbarComponent logOutClick={this.logOutClick} 
+                          token={this.state.token}/>
         <Switch>
+
           <Route path="/signup">
-            <Signup setToken={this.setToken} token={this.state.token}/>
+            <Signup setToken={this.setToken} 
+                    token={this.state.token}/>
           </Route>
+
           <Route path="/login">
-            <Login loggedInUserId={this.state.loggedInUserId} setToken={this.setToken} token={this.state.token} setWatchlistCoins={this.setWatchlistCoins} />
+            <Login loggedInUserId={this.state.loggedInUserId} 
+                    setToken={this.setToken} token={this.state.token} 
+                    setWatchlistCoins={this.setWatchlistCoins} />
           </Route>
+
           <Route path="/dashboard">
             <Dashboard token={this.state.token}/>
           </Route>
+
           <Route path="/prices" component={Prices}>
             {/* <Prices token={this.state.token}/> */}
           </Route>
           
-          <Route path="/coin-detail" component={(navProps) => <CoinDetail {...navProps} token={this.state.token} loggedInUserId={this.state.loggedInUserId} addToWatchlist={this.addToWatchlist} watchlistCoins={this.state.watchlistCoins}/>}>
+          <Route path="/coin-detail" 
+            component={(navProps) => <CoinDetail {...navProps} 
+                                        token={this.state.token} 
+                                        loggedInUserId={this.state.loggedInUserId} 
+                                        addToWatchlist={this.addToWatchlist} 
+                                        watchlistCoins={this.state.watchlistCoins}/>}>
           </Route>
 
           <Route path="/watchlist" >
-            <Watchlist loggedInUserId={this.state.loggedInUserId} token={this.state.token} watchlistCoins={this.state.watchlistCoins}/>
+            <Watchlist loggedInUserId={this.state.loggedInUserId} 
+                        token={this.state.token} 
+                        watchlistCoins={this.state.watchlistCoins}
+                        removeFromWatchlist={this.removeFromWatchlist}
+                        />
           </Route>
+
           <Route path="/">
             <LandingPage />
           </Route>
+
         </Switch>
       </div>
     </Router>   

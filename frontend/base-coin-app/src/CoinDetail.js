@@ -7,6 +7,7 @@ import './CoinDetail.css'
 export default class CoinDetail extends Component {
 
   handleClick = () => {
+    console.log('selectedcoin', this.props.history.location.state.selectedCoin);
     if (!this.props.watchlistCoins.includes(this.props.history.location.state.selectedCoin)) {
       this.props.addToWatchlist(this.props.history.location.state.selectedCoin)
     }

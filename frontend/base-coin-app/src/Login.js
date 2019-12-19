@@ -40,6 +40,7 @@ export default class Login extends Component {
         })
       } else {
         this.props.setToken(data);
+        console.log(data)
         // const response = await fetch(`http://localhost:3000/favorites`);
         // const favoritesData = await response.json()
         // const arr = favoritesData.filter(coin => {
@@ -48,7 +49,8 @@ export default class Login extends Component {
 
         const response = await fetch(`http://localhost:3000/users/${this.props.loggedInUserId}`);
         const userData = await response.json()
-        this.props.setWatchlistCoins(userData.favorite_coins)
+        console.log("user-data", userData.favorites)
+        this.props.setWatchlistCoins(userData.favorites)
       }
     })
   }

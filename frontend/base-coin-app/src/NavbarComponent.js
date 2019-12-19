@@ -39,8 +39,8 @@ export default class NavbarComponent extends Component {
             </li>
           </ul>
           {!!this.props.token ? <Button color="danger" onClick={this.props.logOutClick}>Log out</Button> : ""}
-          {!this.props.token ? <Link to="/login">Login</Link> : ""} 
-          {!this.props.token ? <Link to="/signup">Get Started</Link> : ""}
+          <div style={{marginRight: 15}}>{!this.props.token ? <Link to="/login">Login</Link> : ""} </div>
+          {!this.props.token ? <Link to="/signup"><Button outline color="primary">Get Started</Button>{' '}</Link> : ""}
         </div>
       </nav>
     )

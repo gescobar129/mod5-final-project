@@ -19,7 +19,7 @@ export default class Watchlist extends Component {
 
   render() {
     // console.log(this.state.favoriteCoins)
-    console.log(this.props)
+    // console.log(this.props)
     if (!this.props.token) return <Redirect to='login' />
     return (
 
@@ -27,7 +27,11 @@ export default class Watchlist extends Component {
         <Col xs="12" sm="4">
           <div id="fav-collection">
             {this.props.watchlistCoins.map(watchlistCoin => {
-            return <WatchlistCoinCard watchlistCoin={watchlistCoin} key={watchlistCoin.id} loggedInUserId={this.props.loggedInUserId}/>
+            return <WatchlistCoinCard watchlistCoin={watchlistCoin} 
+            key={watchlistCoin.id} 
+            loggedInUserId={this.props.loggedInUserId}
+            removeFromWatchlist={this.props.removeFromWatchlist}
+            />
           })}
           </div>
         </Col>
