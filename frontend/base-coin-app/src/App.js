@@ -4,7 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import './App.css';
+// import './App.css';
 import NavbarComponent from './NavbarComponent';
 import LandingPage from './LandingPage';
 import Login from './Login';
@@ -20,6 +20,7 @@ export default class App extends Component {
     token: localStorage.token,
     loggedInUserId: localStorage.userId,
     watchlistCoins: localStorage.watchlistCoins ? JSON.parse(localStorage.watchlistCoins) : [],
+    coins: []
     // favoriteItems: localStorage.favoriteItems
   }
 
@@ -39,6 +40,14 @@ export default class App extends Component {
   //   this.setWatchlistCoins(arr)
   //   }
   
+
+  async componentDidMount() {
+    const response = await fetch('http://localhost:3000/coins')
+    const data = await response.json()
+    this.setState({ 
+      coins: data,
+    })
+  }
 
   setWatchlistCoins = (arr) => {
     localStorage.watchlistCoins = JSON.stringify(arr)
@@ -98,6 +107,8 @@ export default class App extends Component {
           // favoriteItems: data
         })
       })
+  } else if (!this.state.token) {
+    alert("you must login")
   } else {
     alert("you are already following this coin")
   }
@@ -146,7 +157,7 @@ removeFromWatchlist = (id) => {
             <Dashboard token={this.state.token}/>
           </Route>
 
-          <Route path="/prices" component={Prices}>
+          <Route path="/prices" component={(navProps) => <Prices {...navProps} coins={this.state.coins} /> }>
             {/* <Prices token={this.state.token}/> */}
           </Route>
           
@@ -158,12 +169,14 @@ removeFromWatchlist = (id) => {
                                         watchlistCoins={this.state.watchlistCoins}/>}>
           </Route>
 
-          <Route path="/watchlist" >
-            <Watchlist loggedInUserId={this.state.loggedInUserId} 
+          <Route path="/watchlist" component={navProps => <Watchlist loggedInUserId={this.state.loggedInUserId}
+                        coins={this.state.coins} 
                         token={this.state.token} 
                         watchlistCoins={this.state.watchlistCoins}
                         removeFromWatchlist={this.removeFromWatchlist}
-                        />
+                        {...navProps}
+                        />} >
+            
           </Route>
 
           <Route path="/">

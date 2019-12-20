@@ -23,19 +23,22 @@ export default class Watchlist extends Component {
     if (!this.props.token) return <Redirect to='login' />
     return (
 
-      <Row>
-        <Col xs="12" sm="4">
-          <div id="fav-collection">
+      <div>
+        <span id="following">Following</span>
+        <Row>
             {this.props.watchlistCoins.map(watchlistCoin => {
-            return <WatchlistCoinCard watchlistCoin={watchlistCoin} 
+            return  <Col md="3" style={{ paddingBottom: 30 }} ><WatchlistCoinCard watchlistCoin={watchlistCoin} 
             key={watchlistCoin.id} 
             loggedInUserId={this.props.loggedInUserId}
             removeFromWatchlist={this.props.removeFromWatchlist}
+            coins={this.props.coins}
+            history={this.props.history}
             />
+            </Col>
           })}
-          </div>
-        </Col>
-      </Row>
+        </Row>
+      </div>
+      
 
         
     )

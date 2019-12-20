@@ -15,6 +15,10 @@ export default class WatchlistCoinCard extends Component {
     this.props.removeFromWatchlist(this.props.watchlistCoin.id)
   }
 
+  goToCoinDetail = () => {
+    this.props.history.push('/coin-detail', { selectedCoin: this.props.watchlistCoin.coin, coinList: this.props.coins })
+  }
+
   render() {
 
     return (
@@ -29,7 +33,7 @@ export default class WatchlistCoinCard extends Component {
         <CardBody>
           {/* <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText> */}
           <div id="click-div">
-            <Button color="info">View</Button>
+            <Button onClick={this.goToCoinDetail} color="info">View</Button>
             <Button onClick={this.handleClick} outline color="danger">Remove</Button>
           </div>
         </CardBody>

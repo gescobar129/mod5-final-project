@@ -7,29 +7,28 @@ import "./Prices.css"
 export default class Prices extends Component {
 
   state = {
-    coins: [],
-    searchedCoins: []
+    // coins: [],
+    searchedCoins: this.props.coins
   }
 
-  async componentDidMount() {
-    const response = await fetch('http://localhost:3000/coins')
-    const data = await response.json()
-    // debugger
-    this.setState({ 
-      coins: data,
-      searchedCoins: data,
-      clickedCoin: {}
-    })
-  }
+  // async componentDidMount() {
+  //   const response = await fetch('http://localhost:3000/coins')
+  //   const data = await response.json()
+  //   // debugger
+  //   this.setState({ 
+  //     // coins: data,
+  //     searchedCoins: data,
+  //   })
+  // }
 
   onSearch = (searchTearm) => {
     this.setState({
-      searchedCoins: this.state.coins.filter(element => element.name.toLowerCase().includes(searchTearm))
+      searchedCoins: this.props.coins.filter(element => element.name.toLowerCase().includes(searchTearm))
     })
   }
 
   handleClick = (coin) => {
-      this.props.history.push('/coin-detail', {selectedCoin: coin, coinList: this.state.coins})
+      this.props.history.push('/coin-detail', {selectedCoin: coin, coinList: this.props.coins})
   }
 
 

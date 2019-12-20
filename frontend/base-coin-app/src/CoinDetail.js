@@ -13,8 +13,12 @@ export default class CoinDetail extends Component {
     }
   }
 
+  goToCoinDetail = (coin) => {
+    this.props.history.push('/coin-detail', {selectedCoin: coin, coinList: this.props.location.state.coinList})
+  }
   
   render() {
+    console.log(this.props)
     return (
 
       <Container id="coin-detail-container" className="themed-container" fluid={true}>
@@ -61,7 +65,7 @@ export default class CoinDetail extends Component {
             <div>
               <h3>Discover More Assets</h3>
               {this.props.history.location.state.coinList.slice(0, 9).map(coin => {
-                return <div>
+                return <div onClick= {() => this.goToCoinDetail(coin)}>
                   <img alt="not found"style={{marginTop: 30}}src={coin.img_url}></img><span style={{marginLeft: 15, marginTop: 30}}>{coin.name}</span><span style={{marginLeft: 15, float: 'right', marginTop: 30}}>${coin.price.toFixed(2)}</span>
                   </div>
               })}  

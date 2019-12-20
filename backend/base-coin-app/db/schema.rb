@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_16_213804) do
+ActiveRecord::Schema.define(version: 2019_12_19_213407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "articles", force: :cascade do |t|
+    t.bigint "coin_id"
+    t.string "author"
+    t.string "title"
+    t.string "description"
+    t.string "article_urlimage_url"
+    t.string "content"
+    t.string "source_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coin_id"], name: "index_articles_on_coin_id"
+  end
 
   create_table "coins", force: :cascade do |t|
     t.string "name"
@@ -61,6 +74,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_213804) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "articles", "coins"
   add_foreign_key "favorites", "coins"
   add_foreign_key "favorites", "users"
   add_foreign_key "transactions", "coins"

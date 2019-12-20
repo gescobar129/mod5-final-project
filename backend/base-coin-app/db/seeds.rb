@@ -50,12 +50,12 @@ symbols_array = symbols.split(",")
 symbols_string = symbols_array.drop(1).join(',')
 puts symbols_string
 
-url_test = URI("https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?symbol=BTC,ETH,XRP,USDT,BCH,LTC,EOS,BNB,BSV,XTZ,XLM,LEO,TRX,ADA,XMR,ATOM,MIN,LINK,HT,NEO,USDC,MIOTA,MKR,ETC,DASH,CRO,HEDG,ONT,XEM,VET,DOGE,PAX,ZEC,BAT,SNX,DCR,TUSD,QTUM,CENNZ,FTT,ZRX,ALGO,RVN,SEELE,REP,HOT,ABBC,BTG,WAVES,NANO,OMG,THETA,ZB,DGB,MOF,VSYS,EKT,KCS,BTM,BCD,SXP,LUNA,ENJ,KMD,LSK,MCO,XVG,BTT,IOST,ICX,BCN,SC,ZEN,SLV,DX,MONA,NEXO,HC,MAID,SAI,NRG,ZIL,QNT,BTS,STEEM,ARDR,AE,KNC,EURS,STRAT,FET,ETN,DGD,TOMO,SOLVE,MATIC,SNT,CRPT,RLC,NPXS")
+url_test = URI("https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?symbol=#{symbols_string}")
 
 http_test = Net::HTTP.new(url_test.host, url_test.port)
 http_test.use_ssl = true
 request_test = Net::HTTP::Get.new(url_test)
-request_test["X-CMC_PRO_API_KEY"] = '5239bd0f-c001-4aee-8917-6f1b98d90e4a'
+request_test["X-CMC_PRO_API_KEY"] = ENV["CMC_SECRET_KEY"]
 request_test["Accept"] = 'application/json'
 request_test["Cache-Control"] = 'no-cache'
 request_test["Host"] = 'pro-api.coinmarketcap.com'
@@ -75,5 +75,23 @@ Coin.all.each do |coin|
     :tech_doc => info[coin.symbol]['urls']['technical_doc']
   )
 end
+
+# url = URI("https://newsapi.org/v2/everything?q=eos-cryptocurrency")
+
+# http = Net::HTTP.new(url.host, url.port)
+
+# request = Net::HTTP::Get.new(url)
+# request["X-Api-Key"] = '9e7df49c010941e5b78a4380e0a293dc'
+# request["User-Agent"] = 'PostmanRuntime/7.20.1'
+# request["Accept"] = '*/*'
+# request["Cache-Control"] = 'no-cache'
+# request["Postman-Token"] = 'e337cb2f-0749-44e7-aa47-cc57ba89d1b1,eec405f3-5741-435a-b95d-0392004ec519'
+# request["Host"] = 'newsapi.org'
+# request["Accept-Encoding"] = 'gzip, deflate'
+# request["Connection"] = 'keep-alive'
+# request["cache-control"] = 'no-cache'
+
+# response = http.request(request)
+# puts response.read_body
 
 puts 'finished'
