@@ -33,6 +33,7 @@ export default class Prices extends Component {
 
 
   render() {
+    console.log(this.props)
     return (
       <Container id="price-container" className="themed-container" fluid={true}>
         <Row>

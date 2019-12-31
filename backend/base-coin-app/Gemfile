@@ -55,3 +55,7 @@ gem "jwt", "~> 2.2"
 
 gem "bitcoin-ruby", "~> 0.0.19"
 
+
+gem "stripe", "~> 5.11"
+
+gem "blockcypher-ruby", "~> 0.2.4"

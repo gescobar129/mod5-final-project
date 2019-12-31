@@ -13,7 +13,7 @@ import Dashboard from './Dashboard';
 import Prices from './Prices';
 import CoinDetail from './CoinDetail';
 import Watchlist from './Watchlist';
-
+// import React, { useState } from 'react';
 export default class App extends Component {
 
   state = {
@@ -42,11 +42,17 @@ export default class App extends Component {
   
 
   async componentDidMount() {
-    const response = await fetch('http://localhost:3000/coins')
-    const data = await response.json()
-    this.setState({ 
-      coins: data,
-    })
+    try {
+      const response = await fetch('http://localhost:3000/coins')
+      const data = await response.json()
+      this.setState({ 
+        coins: data,
+      })
+    } catch (error) {
+      this.setState({
+        coins: []
+      })
+    }
   }
 
   setWatchlistCoins = (arr) => {
@@ -130,6 +136,12 @@ removeFromWatchlist = (id) => {
   // })
 }
 
+buyCoin = () => {
+  console.log('clicked')
+  
+
+}
+
   render() {
 
     console.log(this.state.watchlistCoins)
@@ -166,7 +178,8 @@ removeFromWatchlist = (id) => {
                                         token={this.state.token} 
                                         loggedInUserId={this.state.loggedInUserId} 
                                         addToWatchlist={this.addToWatchlist} 
-                                        watchlistCoins={this.state.watchlistCoins}/>}>
+                                        watchlistCoins={this.state.watchlistCoins}
+                                        buyCoin={this.buyCoin}/>}>
           </Route>
 
           <Route path="/watchlist" component={navProps => <Watchlist loggedInUserId={this.state.loggedInUserId}
