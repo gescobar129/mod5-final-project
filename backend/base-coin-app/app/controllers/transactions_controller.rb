@@ -31,9 +31,6 @@ class TransactionsController < ApplicationController
   private
 
   def transaction_params
-    puts '******************************'
-    puts :user_id
-    puts :coin_id
     params.require(:transaction).permit(:user_id, :coin_id, :amount, :token)
   end
 

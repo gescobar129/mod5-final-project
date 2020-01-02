@@ -3,14 +3,16 @@ import { Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter
 import {Elements, StripeProvider} from 'react-stripe-elements';
 import Chart from './Chart';
 import CheckoutForm from './CheckoutForm';
-import './CoinDetail.css'
+import './CoinDetail.css';
+import moment from 'moment'
 
 
 export default class CoinDetail extends Component {
 
   state = {
     isModalOpen: false,
-    purchaseAmount: 0
+    purchaseAmount: 0,
+    historicalData: []
   }
 
   handleClick = () => {
@@ -31,12 +33,39 @@ export default class CoinDetail extends Component {
 
   goToCoinDetail = (coin) => {
     this.props.history.push('/coin-detail', {selectedCoin: coin, coinList: this.props.location.state.coinList})
+    this.getHistoricalData();
   }
 
   handleOnChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value
     })
+  }
+
+  getHistoricalData = async () => {
+    try {
+      const response = await fetch(`https://api-public.sandbox.pro.coinbase.com/products/${this.props.history.location.state.selectedCoin.symbol}-USD/candles?start=${moment().subtract(1, 'day').format('YYYY-MM-DD')}&end=${moment().format('YYYY-MM-DD')}&granularity=3600`)
+
+      if (response.ok) {
+        const data = await response.json()
+        this.setState({
+          historicalData: data.reverse()
+        })
+      }
+      else {
+        this.setState({
+          historicalData: null
+        })
+      }
+
+    } catch (error) {
+      console.log('WOOOOWOOWOWOW', error);
+    }
+  }
+
+  componentDidMount() {
+    this.getHistoricalData();
+  
   }
 
   render() {
@@ -58,7 +87,9 @@ export default class CoinDetail extends Component {
         <Row id="row-edits">
           <Col xs="5" id="about-column">
             <div id="chart-column">
-              <Chart coin={this.props.history.location.state.selectedCoin}/>
+             {this.state.historicalData === null  ? "No historical data available" : <Chart coin={this.props.history.location.state.selectedCoin} historicalData={this.state.historicalData}/>}
+             
+            
             </div>
             <div id="about-div">
               <h2>About {this.props.history.location.state.selectedCoin.name}</h2><br></br>
@@ -87,26 +118,30 @@ export default class CoinDetail extends Component {
         <Modal isOpen={this.state.isModalOpen} toggle={this.handleBuyClick} >
           <ModalHeader>Buy</ModalHeader>
           <ModalBody>
-          <InputGroup >
+         
             <div className="inputs">
               <div style={{ display: 'flex'}}>
+              <InputGroup >
               <InputGroupAddon addonType="prepend">$</InputGroupAddon>
               <Input onChange={this.handleOnChange} name="purchaseAmount" placeholder="Amount" min={0} max={1000} type="number" step="1" />
               <InputGroupAddon addonType="append">.00</InputGroupAddon>
+              </InputGroup>
+
               </div>
             
               <StripeProvider apiKey="pk_test_8bbC7B605qDELV8i8e3ZuW7U007yMC4TBG">
                 <Elements>
-                  <CheckoutForm loggedInUserId={this.props.loggedInUserId} coinId={this.props.history.location.state.selectedCoin.id} amount={this.state.purchaseAmount}/>
+                  <CheckoutForm ref={this.formRef} loggedInUserId={this.props.loggedInUserId} coinId={this.props.history.location.state.selectedCoin.id} amount={this.state.purchaseAmount}/>
                 </Elements>
               </StripeProvider>
             </div>
           
-          </InputGroup>
           </ModalBody>
           <ModalFooter>
+          <p>{this.props.history.location.state.selectedCoin.symbol} Amount: {Number(this.state.purchaseAmount / this.props.history.location.state.selectedCoin.price).toFixed(2)} </p>
+
             <Button color="primary" >Buy {this.props.history.location.state.selectedCoin.symbol}</Button>
-            <Button color="secondary" >Cancel</Button>
+            <Button color="secondary" onClick={() => this.setState({ isModalOpen: false })}>Cancel</Button>
           </ModalFooter>
         </Modal>
         
@@ -114,3 +149,23 @@ export default class CoinDetail extends Component {
     )
   }
 }
+
+
+
+
+// NOTE:
+// portolio: {
+//   BTC: {
+//     amount: 10000
+//   },
+//   ETH: {
+//     amount: 13993
+//   },
+//   BCH: {
+//     amount: 203
+//   }
+// }
+
+
+
+

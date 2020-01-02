@@ -1,22 +1,26 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {Line} from 'react-chartjs-2';
+import moment from 'moment'
 
 
 
 export default class Chart extends Component {
   render() {
     const state = {
-      labels: ['January', 'February', 'March',
-               'April', 'May'],
+      labels: this.props.historicalData.map(d=> {
+        return moment.unix(d[0]).format('h A')
+      }),
       datasets: [
         {
-          label: 'Rainfall',
+          // label: 'Rainfall',
           fill: false,
           lineTension: 0.5,
           backgroundColor: 'rgba(75,192,192,1)',
           borderColor: 'rgba(0,0,0,1)',
           borderWidth: 2,
-          data: [65, 59, 80, 81, 56]
+          data: this.props.historicalData.map(d=> {
+            return d[4]
+          })
         }
       ]
     }
@@ -24,9 +28,12 @@ export default class Chart extends Component {
       <div>
         <Line
           data={state}
+          legend={{
+            display: false
+          }}
           options={{
             title:{
-              display:true,
+              display: true,
               text: `$${this.props.coin.price.toFixed(2)}`,
               fontSize: 40
             }

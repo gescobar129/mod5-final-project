@@ -4,6 +4,12 @@ import { Container, Row, Col } from 'reactstrap';
 import Search from './Search';
 import "./Prices.css"
 
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFranctionDigits: 2
+})
+
 export default class Prices extends Component {
 
   state = {
@@ -30,6 +36,8 @@ export default class Prices extends Component {
   handleClick = (coin) => {
       this.props.history.push('/coin-detail', {selectedCoin: coin, coinList: this.props.coins})
   }
+
+  
 
 
   render() {
@@ -59,7 +67,7 @@ export default class Prices extends Component {
                   <td id="table-items"><img alt="not found" className="coin-logo"src={coin.img_url}></img>{coin.name}<span style={{ marginLeft: 15}}>{coin.symbol}</span></td>
                   <td id="table-items">${coin.price > .99 ? coin.price.toFixed(2) : coin.price.toFixed(4)}</td>
                   <td id="table-items" style={{color: coin.percent_change_24h < 0 ? 'red' : 'green'}}>{coin.percent_change_24h.toFixed(2)}%</td>
-                  <td id="table-items">${coin.market_cap}</td>
+                  <td id="table-items">{formatter.format(coin.market_cap)}</td>
               </tr> 
             </tbody>
           })}

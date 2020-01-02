@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ModalFooter, Button } from 'reactstrap';
 import {CardElement, injectStripe} from 'react-stripe-elements'
 
 class CheckoutForm extends Component {
@@ -34,7 +35,6 @@ class CheckoutForm extends Component {
 
     return (
        <div className="checkout">
-        <p>Would you like to complete the purchase?</p>
         <CardElement />
         <button onClick={this.submit}>Purchase</button>
       </div>

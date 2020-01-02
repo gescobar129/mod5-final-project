@@ -12,6 +12,11 @@ class UsersController < ApplicationController
   end 
 
   def create
+    # block_cypher = BlockCypher::Api.new('v1', 'btc', 'test', '22fbef419bc4415da7aeb6e5e69cbb22')
+
+    # puts "**********************************"
+    # puts block_cypher
+
     user = User.create(user_params)
     
     if user.valid?
@@ -19,6 +24,8 @@ class UsersController < ApplicationController
     else
         render json: {error: user.errors.full_messages}, status: :unprocessable_entity
     end 
+
+    
   end 
 
   
